@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+</head>
+<body>
+<title>花井麗奈 速報モック</title>
+<style>
+/* Layout: iPhone XR (414x896) screen. Narrow viewport = full-bleed on the real device, wide viewport = bezel frame scaled to fit a dark stage. */
+:root {
+  --key: #00ff00;            /* 合成用グリーン */
+  --key-mark: #008f00;       /* トラッキングマーカー */
+  --stage: #14161b;
+  --stage-ink: #8b90a0;
+  --bezel: #0b0c0e;
+  --app-bg: #ffffff;
+  --ink: #0f0f10;
+  --ink-sub: #62646b;
+  --line: #e6e6ea;
+  --chip: #f0f0f3;
+  --video-brand: #e5141e;
+  --news-brand: #17346e;
+  --alert: #d1121c;
+  --banner-bg: rgba(246, 246, 248, .94);
+  --on-dark: #ffffff;
+  --shade: rgba(0, 0, 0, .78);
+  --sb-h: 44px;
+  --font: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Meiryo", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--stage); color: var(--ink);
+  font-family: var(--font); font-size: 14px; line-height: 1.4;
+  -webkit-text-size-adjust: 100%; overscroll-behavior: none;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--news-brand); outline-offset: 2px; }
+
+/* ---------- stage / frame ---------- */
+.stage { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding-inline: 16px; }
+.wrap { flex: none; }
+.phone { width: 442px; height: 924px; padding: 14px; border-radius: 54px; background: var(--bezel); transform-origin: 0 0; }
+.screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 40px; background: var(--app-bg); user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.hint { margin: 0; color: var(--stage-ink); font-size: 12px; letter-spacing: .04em; text-align: center; }
+
+.statusbar { position: absolute; inset: 0 0 auto 0; height: var(--sb-h); z-index: 6; display: flex; justify-content: space-between; align-items: center; padding: 6px 22px 0 30px; background: var(--app-bg); font-weight: 600; font-size: 15px; }
+.statusbar .notch { position: absolute; top: 0; left: 50%; width: 210px; height: 30px; margin-left: -105px; background: var(--bezel); border-radius: 0 0 20px 20px; }
+.statusbar svg { height: 12px; width: auto; fill: var(--ink); }
+.statusbar .icons { display: flex; gap: 5px; align-items: center; }
+.homebar { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; margin-left: -67px; border-radius: 3px; background: var(--ink); z-index: 7; pointer-events: none; }
+
+/* full-bleed on the real device */
+.is-device body { background: var(--app-bg); }
+.is-device .stage { padding-inline: 0; display: block; }
+.is-device .wrap { width: 100% !important; height: 100% !important; }
+.is-device .phone { width: 100%; height: 100%; padding: 0; border-radius: 0; transform: none !important; }
+.is-device .screen { border-radius: 0; }
+.is-device .statusbar, .is-device .homebar, .is-device .hint { display: none; }
+.is-device { --sb-h: 0px; }
+
+/* ---------- views ---------- */
+.view { position: absolute; inset: var(--sb-h) 0 0 0; display: flex; flex-direction: column; background: var(--app-bg); }
+.scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.scroll::-webkit-scrollbar, .chips::-webkit-scrollbar { display: none; }
+.ico { width: 24px; height: 24px; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* green key + markers */
+.key { position: relative; aspect-ratio: 16 / 9; width: 100%; background: var(--key); }
+.mk { position: absolute; width: 22px; height: 22px; }
+.mk::before, .mk::after { content: ""; position: absolute; background: var(--key-mark); }
+.mk::before { left: 0; right: 0; top: 9px; height: 4px; }
+.mk::after { top: 0; bottom: 0; left: 9px; width: 4px; }
+.mk.tl { top: 10%; left: 7%; } .mk.tr { top: 10%; right: 7%; }
+.mk.bl { bottom: 10%; left: 7%; } .mk.br { bottom: 10%; right: 7%; }
+
+/* ---------- ① video feed ---------- */
+.topbar { flex: none; height: 48px; display: flex; align-items: center; gap: 18px; padding-inline: 14px; }
+.logo { display: flex; align-items: center; gap: 6px; margin-right: auto; font-weight: 800; font-size: 19px; letter-spacing: -.03em; }
+.logo i { width: 26px; height: 26px; border-radius: 50%; background: var(--video-brand); position: relative; }
+.logo i::after { content: ""; position: absolute; left: 10px; top: 7px; border: 6px solid transparent; border-left: 9px solid var(--on-dark); border-right: 0; }
+.me { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #6a5cff, #ff5ca8); flex: none; }
+.chips { flex: none; display: flex; gap: 8px; padding: 6px 14px 10px; overflow-x: auto; scrollbar-width: none; white-space: nowrap; }
+.chips span { padding: 6px 12px; border-radius: 8px; background: var(--chip); font-size: 13px; font-weight: 500; }
+.chips span.on { background: var(--ink); color: var(--on-dark); }
+
+.card { padding-bottom: 14px; }
+.thumb { position: relative; aspect-ratio: 16 / 9; width: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.thumb b { font-size: 34px; font-weight: 900; line-height: 1.1; text-align: center; color: var(--on-dark); letter-spacing: -.02em; text-shadow: 0 3px 0 var(--shade), 0 0 14px var(--shade); transform: rotate(-3deg); padding-inline: 20px; }
+.thumb time { position: absolute; right: 8px; bottom: 8px; padding: 1px 5px; border-radius: 4px; background: var(--shade); color: var(--on-dark); font-size: 12px; font-weight: 600; }
+.t1 { background: radial-gradient(circle at 25% 30%, #ffd84a, #ff7a1a 55%, #c92b0a); }
+.t2 { background: linear-gradient(170deg, #0a0f2c 30%, #2a2f7a 60%, #ff5a8a 62%, #1a1440 64%); }
+.t3 { background: radial-gradient(circle at 70% 60%, #ffffff, #cfe3ff 45%, #7fa8e8); }
+.t3 b { color: #c2410c; text-shadow: 0 3px 0 #ffffff, 0 0 12px #ffffff; }
+.t4 { background: linear-gradient(120deg, #f6e9d8 50%, #e2bfa0 50%); }
+.t4 b { color: #7a1f3d; text-shadow: 0 3px 0 #ffffff; }
+.t5 { background: repeating-linear-gradient(45deg, #5b17c9 0 28px, #7a2df0 28px 56px); }
+.meta { display: flex; gap: 12px; padding: 12px 14px 0; align-items: flex-start; }
+.ava { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+.meta div { flex: 1; min-width: 0; }
+.meta h3 { margin: 0 0 3px; font-size: 15px; font-weight: 500; line-height: 1.35; }
+.meta p { margin: 0; font-size: 12px; color: var(--ink-sub); }
+.meta .ico { width: 18px; height: 18px; margin-top: 2px; }
+
+.tabbar { flex: none; position: relative; display: flex; justify-content: space-around; align-items: flex-start; height: 74px; padding-top: 7px; border-top: 1px solid var(--line); background: var(--app-bg); }
+.is-device .tabbar { height: calc(56px + env(safe-area-inset-bottom, 0px)); }
+.tabbar span { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10px; width: 68px; white-space: nowrap; letter-spacing: -.02em; }
+.tabbar .plus { width: 36px; height: 36px; border: 1.6px solid var(--ink); border-radius: 50%; justify-content: center; font-size: 24px; font-weight: 300; line-height: 1; }
+.trigger { position: absolute; inset: 0; width: 100%; opacity: 0; }
+
+/* ---------- ② notification ---------- */
+.banner { position: absolute; z-index: 5; top: calc(var(--sb-h) + 6px); left: 8px; right: 8px; width: calc(100% - 16px); padding: 10px 12px 12px; border-radius: 13px; text-align: left; background: var(--banner-bg); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: 0 8px 28px rgba(0, 0, 0, .28); transform: translateY(-190%); transition: transform .5s cubic-bezier(.2, .9, .25, 1); }
+.banner.show { transform: none; }
+.banner .head { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ink-sub); letter-spacing: .02em; }
+.banner .head time { margin-left: auto; }
+.appico { width: 20px; height: 20px; border-radius: 5px; background: var(--news-brand); color: var(--on-dark); font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none; }
+.banner strong { display: block; margin-top: 7px; font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+
+/* ---------- ③ news ---------- */
+#news { z-index: 4; transform: translateX(102%); transition: transform .36s cubic-bezier(.3, .8, .3, 1); }
+#news.show { transform: none; }
+.nbar { flex: none; height: 48px; display: flex; align-items: center; gap: 10px; padding-inline: 8px 14px; border-bottom: 1px solid var(--line); }
+.nbar button { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; }
+.nlogo { display: flex; align-items: center; gap: 7px; margin-right: auto; font-weight: 800; font-size: 16px; letter-spacing: .04em; color: var(--news-brand); }
+.nlogo .appico { width: 24px; height: 24px; border-radius: 6px; font-size: 15px; }
+.ntabs { flex: none; display: flex; gap: 22px; padding: 0 16px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--ink-sub); }
+.ntabs span { padding: 10px 0 8px; border-bottom: 3px solid transparent; }
+.ntabs span.on { color: var(--alert); border-color: var(--alert); }
+.article { padding: 14px 16px 28px; }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; background: var(--alert); color: var(--on-dark); font-size: 12px; font-weight: 700; letter-spacing: .1em; }
+.article h1 { margin: 8px 0 6px; font-size: 23px; font-weight: 800; line-height: 1.32; text-wrap: balance; }
+.article .by { margin: 0 0 14px; font-size: 12px; color: var(--ink-sub); }
+.article p { margin: 0 0 12px; font-size: 16px; line-height: 1.75; }
+.rel { margin: 18px 0 0; padding: 0; list-style: none; border-top: 6px solid var(--chip); }
+.rel h2 { margin: 14px 16px 2px; font-size: 14px; font-weight: 700; }
+.rel li { display: flex; gap: 12px; align-items: center; margin-inline: 16px; padding-block: 12px; border-bottom: 1px solid var(--line); font-size: 15px; font-weight: 600; line-height: 1.4; }
+.rel li i { width: 88px; aspect-ratio: 16 / 10; border-radius: 4px; background: linear-gradient(135deg, #c9cdd6, #9aa0ad); flex: none; }
+.rel li small { display: block; margin-top: 3px; font-size: 11px; font-weight: 400; color: var(--ink-sub); }
+
+@media (prefers-reduced-motion: reduce) { .banner, #news { transition: none; } }
+</style>
+
+<div class="stage">
+  <div class="wrap" id="wrap">
+    <div class="phone" id="phone">
+      <div class="screen">
+
+        <div class="statusbar" aria-hidden="true">
+          <span>14:04</span>
+          <i class="notch"></i>
+          <span class="icons">
+            <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".7"/><rect x="5" y="5.5" width="3" height="6.5" rx=".7"/><rect x="10" y="3" width="3" height="9" rx=".7"/><rect x="15" y="0" width="3" height="12" rx=".7"/></svg>
+            <svg viewBox="0 0 16 12"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1-1.1A10 10 0 0 0 8 .6 10 10 0 0 0 1 3.5l1 1.1a8.6 8.6 0 0 1 6-2.4Zm0 3.5c1.4 0 2.6.5 3.6 1.4l1-1.1A6.800 6.800 0 0 0 8 4.200c-1.800 0-3.400.700-4.600 1.800l1 1.100c1-.900 2.200-1.400 3.600-1.400Zm0 3.400c-.800 0-1.500.300-2 .800l2 2.100 2-2.100c-.500-.500-1.200-.800-2-.800Z"/></svg>
+            <svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.600"/><rect x="24" y="4" width="2" height="4" rx="1" opacity=".5"/></svg>
+          </span>
+        </div>
+
+        <!-- ① 動画フィード -->
+        <section class="view" id="feed">
+          <header class="topbar">
+            <span class="logo"><i></i>Vidoo</span>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 8V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-6M3 19h.01M3 15a4 4 0 0 1 4 4M3 11a8 8 0 0 1 8 8"/></svg>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4l2-2Zm4 5h4"/></svg>
+            <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.500"/><path d="m16 16 4.500 4.500"/></svg>
+            <i class="me"></i>
+          </header>
+          <div class="chips"><span class="on">すべて</span><span>ニュース</span><span>音楽</span><span>ライブ</span><span>ゲーム</span><span>料理</span><span>最近アップロードされた動画</span></div>
+
+          <div class="scroll">
+            <article class="card">
+              <div class="key"><i class="mk tl"></i><i class="mk tr"></i><i class="mk bl"></i><i class="mk br"></i></div>
+              <div class="meta">
+                <i class="ava" style="background:linear-gradient(135deg,#1b1b1f,#c2121c)"></i>
+                <div><h3>閲覧注意：あの花井麗奈の隠し子、見つけました</h3><p>ウラトリ暴露ch・107万 回視聴・4日前</p></div>
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg>
+              </div>
+            </article>
+            <article class="card">
+              <div class="thumb t1"><b>コンビニ新作<br>全部食べた</b><time>18:32</time></div>
+              <div class="meta"><i class="ava" style="background:#ff8a1f"></i><div><h3>【検証】コンビニ新作スイーツ全部食べ比べたら優勝が決まった</h3><p>もぐもぐ研究所・23万 回視聴・1日前</p></div><svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg></div>
+            </article>
+            <article class="card">
+              <div class="thumb t2"><b>NIGHT DRIVE</b><time>1:02:15</time></div>
+              <div class="meta"><i class="ava" style="background:#2a2f7a"></i><div><h3>深夜の首都高を走るだけ【作業用BGM】</h3><p>NIGHT DRIVE JP・8.4万 回視聴・2週間前</p></div><svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg></div>
+            </article>
+            <article class="card">
+              <div class="thumb t3"><b>はじめての雪！</b><time>4:07</time></div>
+              <div class="meta"><i class="ava" style="background:#d9a05b"></i><div><h3>柴犬まめ、はじめての雪に大興奮</h3><p>まめ日和・312万 回視聴・1か月前</p></div><svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg></div>
+            </article>
+            <article class="card">
+              <div class="thumb t4"><b>収納術<br>7選</b><time>12:48</time></div>
+              <div class="meta"><i class="ava" style="background:#7a1f3d"></i><div><h3>1週間で部屋が片づく収納術7選</h3><p>くらしノート・56万 回視聴・3日前</p></div><svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg></div>
+            </article>
+            <article class="card">
+              <div class="thumb t5"><b>参加型<br>レース大会</b><time>2:41:09</time></div>
+              <div class="meta"><i class="ava" style="background:#5b17c9"></i><div><h3>【生配信アーカイブ】視聴者参加型レース大会</h3><p>ゲーム部屋ハル・1.9万 回視聴・6時間前</p></div><svg class="ico" viewBox="0 0 24 24"><path d="M12 5h.01M12 12h.01M12 19h.01" stroke-width="3"/></svg></div>
+            </article>
+          </div>
+
+          <nav class="tabbar">
+            <span><svg class="ico" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z" fill="currentColor"/></svg>ホーム</span>
+            <span><svg class="ico" viewBox="0 0 24 24"><path d="M9 3h6a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Zm1.500 6v6l5-3z"/></svg>ショート</span>
+            <span class="plus">+</span>
+            <span><svg class="ico" viewBox="0 0 24 24"><path d="M4 9h16v10H4zM6 6h12M8 3h8M10.500 11.500v5l4.500-2.500z"/></svg>登録チャンネル</span>
+            <span><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.500"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>マイページ</span>
+            <!-- 隠しボタン: 下部タブバー全体 -->
+            <button class="trigger" id="trigger" type="button" aria-label="通知を表示"></button>
+          </nav>
+        </section>
+
+        <!-- ③ ニュース -->
+        <section class="view" id="news" aria-hidden="true">
+          <header class="nbar">
+            <button id="back" type="button" aria-label="戻る"><svg class="ico" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg></button>
+            <span class="nlogo"><i class="appico">N</i>TOPIC NEWS</span>
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6"/></svg>
+          </header>
+          <div class="ntabs"><span>トップ</span><span class="on">速報</span><span>国内</span><span>エンタメ</span><span>スポーツ</span></div>
+          <div class="scroll">
+            <div class="key"><i class="mk tl"></i><i class="mk tr"></i><i class="mk bl"></i><i class="mk br"></i></div>
+            <div class="article">
+              <span class="tag">速報</span>
+              <h1>花井麗奈死刑囚 搬送中に逃走</h1>
+              <p class="by">TOPIC NEWS 編集部・たった今</p>
+              <p>医療機関へ搬送中だった花井麗奈死刑囚が逃走したことが、関係者への取材でわかった。</p>
+              <p>花井死刑囚を乗せた救急車は路上で激しく炎上しており、警察は周辺に緊急配備を敷いて行方を追っている。</p>
+            </div>
+            <ul class="rel">
+              <h2>関連ニュース</h2>
+              <li><i></i><span>救急車が炎上 周辺道路で通行止め<small>3分前</small></span></li>
+              <li><i></i><span>警察が緊急配備 付近住民に注意呼びかけ<small>5分前</small></span></li>
+              <li><i></i><span>花井麗奈死刑囚とは 事件の経緯を振り返る<small>8分前</small></span></li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- ② 通知バナー -->
+        <button class="banner" id="banner" type="button" tabindex="-1">
+          <span class="head"><i class="appico">N</i>TOPIC NEWS<time>今</time></span>
+          <strong>速報：花井麗奈死刑囚 搬送中に逃走</strong>
+        </button>
+
+        <i class="homebar"></i>
+      </div>
+    </div>
+  </div>
+  <p class="hint">Enter 通知を出す ／ 通知をクリックでニュース ／ Esc リセット ／ F フレーム切替</p>
+</div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const $ = id => document.getElementById(id);
+  const wrap = $('wrap'), phone = $('phone'), banner = $('banner'), news = $('news');
+  const W = 442, H = 924;
+  let forced = null;
+
+  const fit = () => {
+    const device = forced ?? window.innerWidth <= 600;
+    root.classList.toggle('is-device', device);
+    if (device) { wrap.style.cssText = ''; phone.style.transform = ''; return; }
+    const s = Math.max(.35, Math.min(1, (window.innerHeight - 64) / H, (window.innerWidth - 32) / W));
+    wrap.style.width = W * s + 'px';
+    wrap.style.height = H * s + 'px';
+    phone.style.transform = `scale(${s})`;
+  };
+
+  const notify = () => {
+    if (news.classList.contains('show')) return;
+    banner.classList.add('show');
+    banner.tabIndex = 0;
+  };
+  const openNews = () => {
+    if (!banner.classList.contains('show')) return;
+    banner.classList.remove('show');
+    banner.tabIndex = -1;
+    news.classList.add('show');
+    news.setAttribute('aria-hidden', 'false');
+  };
+  const reset = () => {
+    banner.classList.remove('show');
+    banner.tabIndex = -1;
+    news.classList.remove('show');
+    news.setAttribute('aria-hidden', 'true');
+    news.querySelector('.scroll').scrollTop = 0;
+  };
+
+  $('trigger').addEventListener('click', notify);
+  banner.addEventListener('click', openNews);
+  $('back').addEventListener('click', reset);
+  document.addEventListener('keydown', e => {
+    if (e.repeat) return;
+    if (e.key === 'Enter') { e.preventDefault(); notify(); }
+    else if (e.key === 'Escape') reset();
+    else if (e.key === 'f' || e.key === 'F') { forced = !root.classList.contains('is-device'); fit(); }
+  });
+  window.addEventListener('resize', fit);
+  fit();
+
+  // 撮影中の画面スリープ防止(非対応環境では何もしない)
+  document.addEventListener('pointerdown', () => {
+    try { navigator.wakeLock?.request('screen').catch(() => {}); } catch (_) {}
+  }, { once: true });
+})();
+</script>
+</body>
+</html>
